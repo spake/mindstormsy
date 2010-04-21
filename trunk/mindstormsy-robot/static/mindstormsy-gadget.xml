@@ -1,0 +1,358 @@
+<!--
+
+Copyright (C) 2010 George Caley
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<Module>
+	<ModulePrefs title="Mindstormsy-Gadget" height="400">
+		<Require feature="wave" />
+		<Require feature="rpc" />
+		<Require feature="dynamic-height" />
+		<Require feature="minimessage" />
+	</ModulePrefs>	
+	<Content type="html">
+	<![CDATA[
+		<style type="text/css">
+			.mmlib_table {
+				font-size: 12pt;
+			}
+			
+			#addform_content {
+				display: none;
+			}
+			#addform_errormessage {
+				color: #FF0000;
+				font-weight: bold;
+			}
+			#waveid_content {
+				font-size: 10pt;
+			}
+		</style>
+
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load("jquery", "1.3.2");
+		</script>
+		
+		<script type="text/javascript">
+			// The video embed code is stored here, and this variable is used for comparisons in stateChanged()
+			// This is because some browsers modify HTML after it has been inserted into the DOM, and this breaks the comparisons
+			var video_code_cache = "";
+			
+			// Returns the default, empty shared state dictionary
+			function emptyState() {
+				return {"buttons": objectToJson([]), "actions": objectToJson([]), "video_code": ""};
+			}
+			
+			// --== BUTTON STUFF ==--
+			
+			// Convert JSON to object
+			function jsonToObject(j) {
+				return JSON.parse(j);
+			}
+			
+			// Convert object to JSON
+			function objectToJson(o) {
+				return JSON.stringify(o);
+			}
+			
+			// Get the buttons
+			function buttons() {
+				var state = wave.getState();
+				
+				if (state.getKeys().length == 0) {
+					// There are no keys
+					// Initialise the shared state
+					state.submitDelta(emptyState());
+				}
+				
+				return jsonToObject(state.get("buttons"));
+			}
+			
+			// Set the buttons
+			function setButtons(b) {
+				var state = wave.getState();
+				state.submitDelta({"buttons": objectToJson(b)});
+			}
+			
+			// Test whether a button exists with the specified label
+			function buttonExistsWithLabel(label) {
+				var b = buttons();
+				for (var i = 0; i < b.length; i++) {
+					var button = b[i];
+					if (button["label"] == label) {
+						return true;
+					}
+				}
+				return false;
+			}
+			
+			// Updates the buttons
+			function setupButtons(editing) {
+				b = buttons();
+				var code = "";
+				for (var i = 0; i < b.length; i++) {
+					var button = b[i];
+					var button_code = "<input type=\"button\" value=\"" + button["label"] + "\" onclick=\"action('" + button["action"] + "');\" />";
+					if (editing) {
+						button_code += "&nbsp;&nbsp;<a href=\"javascript:removeButton('"+button["label"]+"');\">X</a>";
+					}
+					button_code += "<br />";
+					code += button_code;
+				}
+				$("#buttons_content").html(code);
+				gadgets.window.adjustHeight();
+			}
+			
+			// --== ACTION STUFF ==--
+			
+			// Get the actions
+			function actions() {
+				var state = wave.getState();
+				
+				if (state.getKeys().length == 0) {
+					// There are no keys
+					// Initialise the shared state
+					state.submitDelta(emptyState());
+				}
+				
+				return jsonToObject(state.get("actions"));
+			}
+			
+			// Set the actions
+			function setActions(b) {
+				var state = wave.getState();
+				state.submitDelta({"actions": objectToJson(b)});
+			}
+			
+			// Called when the user clicks on a button
+			function action(action) {
+				setActions([action]);
+				//var currentActions = actions();
+				//currentActions.push(action);
+				//setActions(currentActions);
+			}
+			
+			// --== CALLBACKS ==--
+			
+			// Called when the shared state changes
+			function stateChanged() {
+				var state = wave.getState();
+				
+				setupButtons(isEditing());
+				
+				var code = state.get("video_code");
+				if (code != video_code_cache) {
+					if (code == "" || code == undefined) {
+						unembedVideo();
+					} else {
+						embedVideo(code);
+					}
+				}
+			}
+			
+			// Called when the editing mode changes
+			function modeChanged() {
+				setEditing(isEditing());
+			}
+			
+			// --== VIDEO EMBED STUFF ==--
+			
+			// Embeds the contents of code in #video_content_player
+			function embedVideo(code) {
+				video_code_cache = code;
+				document.getElementById("video_content_player").innerHTML = code;
+				document.getElementById("video_content_buttons").innerHTML = "<input type=\"button\" value=\"Remove Video\" onclick=\"userUnembedVideo();\" />";
+				gadgets.window.adjustHeight();
+				
+			}
+			
+			// Embeds the value of #stream_code in #video_content_player and updates the shared state
+			function userEmbedVideo() {
+				var code = document.getElementById("stream_code").value;
+				embedVideo(code);
+				var state = wave.getState();
+				state.submitDelta({"video_code": code});
+			}
+			
+			// The embed form code
+			var embedder = "Video stream embed code: <input type=\"text\" id=\"stream_code\" size=\"50\" /> <input type=\"button\" value=\"Embed\" onclick=\"userEmbedVideo();\" />";
+			
+			// Unembeds the video
+			function unembedVideo() {
+				video_code_cache = "";
+				document.getElementById("video_content_player").innerHTML = "";
+				document.getElementById("video_content_buttons").innerHTML = embedder;
+				gadgets.window.adjustHeight();
+			}
+			
+			// Unembeds the video and updates the shared state
+			function userUnembedVideo() {
+				unembedVideo();
+				var state = wave.getState();
+				state.submitDelta({"video_code": ""});
+			}
+			
+			// --== EDITING STUFF ==--
+			
+			// Tests whether the user is editing our blip
+			function isEditing() {
+				var mode = wave.getMode();
+				return (mode == wave.Mode.EDIT);
+			}			
+			
+			// Updates the gadget based on whether the user is editing or not
+			function setEditing(editing) {
+				clearAddForm();
+				if (editing) {
+					$("#addform_content").css("display", "block");
+				} else {
+					$("#addform_content").css("display", "none");
+				}
+				setupButtons(editing);
+			}
+			
+			// --== FORM STUFF ==--
+			
+			// Clears the add form checkboxes, combo boxes, text box and error message
+			function clearAddForm() {
+				document.getElementById("addform_motorA_enabled").checked = false;
+				document.getElementById("addform_motorB_enabled").checked = false;
+				document.getElementById("addform_motorC_enabled").checked = false;
+				$("#addform_motorA_action").val("fwd");
+				$("#addform_motorB_action").val("fwd");
+				$("#addform_motorC_action").val("fwd");
+				$("#addform_buttonname").val("");
+			}
+			
+			// Adds a button
+			function addButton() {
+				var motorAEnabled = ($("#addform_motorA_enabled:checked").val() == "on");
+				var motorBEnabled = ($("#addform_motorB_enabled:checked").val() == "on");
+				var motorCEnabled = ($("#addform_motorC_enabled:checked").val() == "on");
+				var motorAAction = $("#addform_motorA_action option:selected").val();
+				var motorBAction = $("#addform_motorB_action option:selected").val();
+				var motorCAction = $("#addform_motorC_action option:selected").val();
+				var label = $("#addform_buttonname").val();
+				
+				var badCharacters = false;
+				for (var i = 0; i < label.length; i++) {
+					var c = label[i];
+					if (c == "\"" || c == "'") {
+						badCharacters = true;
+						break;
+					}
+				}
+				
+				if (badCharacters) {
+					var msg = new gadgets.MiniMessage(__MODULE_ID__, document.getElementById("minimessage_content"));
+					msg.createDismissibleMessage("Please ensure the button's name does not contain any of the following symbols: \" '", 3);
+					gadgets.window.adjustHeight();
+				} else if (buttonExistsWithLabel(label)) {
+					var msg = new gadgets.MiniMessage(__MODULE_ID__, document.getElementById("minimessage_content"));
+					msg.createDismissibleMessage("Please choose a unique name for the button.", 3);
+					gadgets.window.adjustHeight();
+				} else {
+					var action = "";
+					
+					action += (motorAEnabled ? motorAAction[0] : "x");
+					action += (motorBEnabled ? motorBAction[0] : "x");
+					action += (motorCEnabled ? motorCAction[0] : "x");
+					
+					var button = {
+						"label": label,
+						"action": action
+					};
+					var currentButtons = buttons();
+					currentButtons.push(button);
+					setButtons(currentButtons);
+					setupButtons(isEditing());
+					clearAddForm();
+				}
+			}
+			
+			// Removes a button
+			function removeButton(label) {
+				var currentButtons = buttons();
+				var index = -1;
+				for (var i = 0; i < currentButtons.length; i++) {
+					var button = currentButtons[i];
+					if (button["label"] == label) {
+						index = i;
+						break;
+					}
+				}
+				if (index > -1) {
+					currentButtons.splice(index, 1);
+					setButtons(currentButtons);
+				}
+				setupButtons(isEditing());
+			}
+			
+			// --== MISC ==--
+			
+			// Called when the gadget launches
+			function main() {
+				if (wave && wave.isInWaveContainer()) {
+					wave.setStateCallback(stateChanged);
+					wave.setModeCallback(modeChanged);
+				}
+				setupButtons(isEditing());
+			}
+			
+			// Displays the parent wave's ID in the gadget
+			// Required so the user knows which wave to reference in the client
+			function displayWaveId() {
+				$("#waveid_content").html("Wave ID = " + wave.getWaveId());
+			}
+
+			gadgets.util.registerOnLoadHandler(main);
+		</script>
+
+		<div id="wrapper">
+			<div style="font-size: 18pt; font-weight: bold;">Mindstormsy</div>
+			<div id="waveid_content"><input type="button" value="Get Wave ID" onclick="displayWaveId();" /></div>
+			<hr />
+			<div id="video_content" style="height: 365px;">
+				<div id="video_content_player">
+				</div>
+				<div id="video_content_buttons">
+					<script type="text/javascript">
+						document.write(embedder);
+					</script>
+				</div>
+			</div>
+			<hr />
+			<div id="addform_content">
+				<br />
+				Button Name: <input type="text" id="addform_buttonname" size="20" /><br />
+				<script type="text/javascript">
+					var motors = ['A','B','C'];
+					for (var i = 0; i < motors.length; i++) {
+						document.write('Motor '+motors[i]+': <input type="checkbox" id="addform_motor'+motors[i]+'_enabled" /> <select id="addform_motor'+motors[i]+'_action"><option value="fwd">Forward</option><option value="rev">Reverse</option></select><br />');
+					}
+				</script>
+				<input type="button" value="Add" onclick="addButton();" />
+				<br />
+				<div id="minimessage_content"></div>
+				<hr />
+			</div>
+			<div id="buttons_content">
+
+			</div>
+		</div>
+	]]>
+	</Content>
+</Module>
