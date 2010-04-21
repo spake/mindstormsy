@@ -20,7 +20,7 @@ Requirements for the live video feed (optional):
  # On your Mac, go to the Bluetooth menu in the top right corner of the screen and turn on Bluetooth.
  # In the Bluetooth menu, choose 'Set Up Bluetooth Device' and follow the instructions to pair your computer with the robot (hint: the robot is usually called NXT).
  # Head into System Preferences and click on Bluetooth. Highlight your robot in the sidebar, click on the little gear at the bottom of the list, and choose 'Edit Serial Ports'. Wait for the port name to load, and note down what's written next to 'Path'. Mine was /dev/tty.NXT-DevB, and yours will probably be similar.
- # Click here (link coming soon!) and install the Mindstormsy Google Wave extension into your Wave account. Then make a new Wave, edit the root blip and click on the new 'M+' button on your toolbar.
+ # Click here (https://wave.google.com/wave/#restored:wave:googlewave.com!w%252BP48dCEWuB) and install the Mindstormsy Google Wave extension into your Wave account. Then make a new Wave, edit the root blip and click on the new 'M+' button on your toolbar.
  # Click on 'Get Wave ID', and note down the result. Chances are it'll look something like 'googlewave.com!w+abc123'.
  # Check out the contents of the mindstormsy-client folder from the source tree (click on the Source tab at the top of this page).
  # Open up a Terminal window and cd into the mindstormsy-client folder that you downloaded.
