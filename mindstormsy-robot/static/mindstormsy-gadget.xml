@@ -105,9 +105,11 @@ limitations under the License.
 				var code = "";
 				for (var i = 0; i < b.length; i++) {
 					var button = b[i];
-					var button_code = "<input type=\"button\" value=\"" + button["label"] + "\" onclick=\"action('" + button["action"] + "');\" />";
-					if (editing) {
-						button_code += "&nbsp;&nbsp;<a href=\"javascript:removeButton('"+button["label"]+"');\">X</a>";
+					var button_code;
+                    if (!editing) {
+                        button_code = "<input type=\"button\" value=\"" + button["label"] + "\" onclick=\"action('" + button["action"] + "');\" />";
+					} else {
+						button_code = "<input type=\"button\" value=\"Remove '" + button["label"] + "'\" onclick=\"removeButton('" + button["label"] + "');\" />";;
 					}
 					button_code += "<br />";
 					code += button_code;
