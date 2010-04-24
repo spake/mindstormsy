@@ -458,8 +458,8 @@ limitations under the License.
 					for (var i = 0; i < motors.length; i++) {
 						document.write('Motor '+motors[i]+': <input type="checkbox" id="addform_motor'+motors[i]+'_enabled" /> <select id="addform_motor'+motors[i]+'_action"><option value="fwd">Forward</option><option value="rev">Reverse</option></select><br />');
 					}
+					document.write(makeButon("Add", "add_button", "addButton()"));
 				</script>
-				<input type="button" value="Add" onclick="addButton();" />
 				<br />
 				<div id="minimessage_content"></div>
 				<hr />
