@@ -40,6 +40,94 @@ limitations under the License.
 				font-size: 10pt;
 			}
 		</style>
+		
+		<!-- These button styles were originally from the Google Wave client. A big thank you to the Wave team! -->
+		<style type="text/css">
+			.button_container {
+				padding-right: 0.5em;
+				font-weight: bold;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				cursor: pointer;
+				font-family: arial, sans-serif;
+				font-size: small;
+				display: inline;
+			}
+			
+			.button_table {
+				border-color: gray;
+				border-collapse: separate;
+				display: inline;
+			}
+			
+			.button_table_body {
+				border-color: inherit;
+				display: inline;
+				vertical-align: middle;
+			}
+			
+			.button_table_row {
+				border-color: inherit;
+				display: inline;
+				vertical-align: inherit;
+			}
+			
+			.button_left {
+				font-family: arial, sans-serif;
+				font-size: small;
+				padding: 0px;
+			}
+			
+			.button_left_content {
+				background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAYCAYAAADd5VyeAAAAuElEQVR42j3RzQmEMBhF0XRgydOBhShuXFiBBczKjSCiKKITFFEi/iST7wkvcMBcQ0hUKT/iOP4kSWKiKHIyCdM0/XVd52QoX2+ttbPWuud53iAP13W58zzfIEuP4wAGYwww7PsODNu2AcO6rsCwLAswzPMMDHI4wTBNEzCM4wgMwzAAQ9/3wCDXFwxt2wJD0zTAUNc1SNBy5KqqAN80yzJbFIUryxIrgjzPv/6FE/IXlN8i8ELv/gP0F0t5Kj1SCQAAAABJRU5ErkJggg==) no-repeat 0px 0px;
+				height: 24px;
+				overflow: hidden;
+				width: 4px;
+			}
+			
+			.button_mid_content {
+				background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAYCAYAAABKtPtEAAAAeklEQVR42u3YAQpFEQBE0dn/VqyJ5PUkEr2IpOYvZP6ts4kLYwyVgeLh3ktlOOdQGfbeVIa1FpVhzkllGGNQGb7vozL03qkMrTUqQ62VylBKoTLknKkMKSUqQ4yRyvC+L5XheR4qQwiByuC9pzI456gM1loqw/8Ki/cDaJtRS5zeSF8AAAAASUVORK5CYII=) repeat-x 0px 0px;
+				font-weight: bold;
+				font-size: 8.5pt;
+				height: 24px;
+				line-height: 24px;
+				overflow: ;
+				padding: 0px 3px;
+				white-space: nowrap;
+			}
+			
+			.button_right_content {
+				background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAYCAYAAAAyJzegAAAA0UlEQVR42kXRvQqDMBSG4VxB6dW3W7cuCuLoqFcgrg4i/iH+oIhiEPVrju05DTxD3kAIOcq2bViWhTAMsa7rE8BdHceBruvged51YPYPte87SFEUcF0X53lqtW0biNYadBUtRRsm0VwOJnFZFjCJ8zyDSZymCUziOI5gEodhAJPY9z2YxLZtwSQ2TQMmsa5rMPqtK1ZVBSaxLEswiXmeg0nMsgxMYpqmYBKTJAGJougf4zi+ZkOjCILgG+nBjuPA9/3NfPRiBvdW5mD/6YyXcfsA6sexoNI2z+EAAAAASUVORK5CYII=) no-repeat 0px 0px;
+				height: 24px;
+				overflow: hidden;
+				width: 5px;
+				font-family: arial, sans-serif;
+				font-size: small;
+				padding: 0px;
+				display: block;
+				vertical-align: inherit;
+			}
+			
+			.button_container.button_down .button_left_content {
+				height: 24px;
+				width: 4px;
+				overflow: hidden;
+				background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAYCAYAAADd5VyeAAAAp0lEQVR42k3R4QaEQBSG4XMHewV7zXsfpaSIqDYiSmnFqIiY7qOzMx/72eHhnJfza0TcC4Lg7dyO+mXyw4/8LwxRFBFCkiSEkGUZIeR5TghFURBCVVWE0DQNIbRtSwhd1xFC3/eEMI4jIczzTAjLspCEYajGGELY950QjuMghPM8SeI4vrdtU2stSFmWU5qmuq6rXtelMgzDs67rjz/1/C+Iqj6cl6NfSY8tmliNxMwAAAAASUVORK5CYII=") -0px -0px  no-repeat;
+			}
+			
+			.button_container.button_down .button_mid_content {
+				height: 24px;
+				overflow: hidden;
+				background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAYCAYAAABKtPtEAAAAf0lEQVR42u3QUQZFIQBF0TP/oZSIuNyPiIiIuPQREdE4zhvIeZs1gQ1jDJXhP0B9gHOOyuC9pzKEEKgMz/NQGd73pTLEGKkMKSUqQ86ZylBKoTLUWqkMrTUqQ++dyvB9H5VhjEFlmHNSGdZaVIa9N5XhnENluPdSGay1VAaK9wOpLeleWAhP0AAAAABJRU5ErkJggg==") -0px -0px  repeat-x;line-height:24px;
+			}
+			
+			.button_container.button_down .button_right_content {
+				height: 24px;
+				width: 5px;
+				overflow: hidden;
+				background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAYCAYAAAAyJzegAAAAuElEQVR42lXNMQqDQBSE4b1BcoJcOUdIryiKIFgIiiAIEkHWQhAEq3SS1sLJ2+C8xIG/+R7LGs/zcPSUbsbtDxFFkQVwPaG0C95NEARg7iBbjTwBOxAmSRIwxTRNwRSzLANTzPMcTLEoCjDFqqrAFOu6BlNsmgZMsW1bMMWu68AU+74HUxyGAUxxHEcwxWmawBTneQZTXJYFLmvtGd0ncRyjLMvXF33fRxiGu4Nt295iD4PfVgfS5QM23483oLRuQwAAAABJRU5ErkJggg==") -0px -0px  no-repeat;
+			}
+		</style>
 
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
@@ -47,6 +135,16 @@ limitations under the License.
 		</script>
 		
 		<script type="text/javascript">
+			// Kudos to https://issues.apache.org/jira/browse/SHINDIG-812 for this interesting piece of code
+			gadgets.window.resizeAgain = function() {
+				gadgets.window.adjustHeight();
+				if (window.addEventListener) {
+					window.addEventListener("resize", gadgets.window.resizeAgain, false);
+				} else if (window.attachEvent) {
+					window.attachEvent("resize", gadgets.window.resizeAgain);
+				}
+			};
+			
 			// The video embed code is stored here, and this variable is used for comparisons in stateChanged()
 			// This is because some browsers modify HTML after it has been inserted into the DOM, and this breaks the comparisons
 			var video_code_cache = "";
@@ -99,6 +197,24 @@ limitations under the License.
 				return false;
 			}
 			
+			// Switches a Wave-style button to the down state
+			function buttonMouseDown(id) {
+				document.getElementById(id).className = "button_container button_down";
+			}
+			
+			// Switches a Wave-style button to the up state
+			function buttonMouseUp(id) {
+				document.getElementById(id).className = "button_container";
+			}
+			
+			// Creates a Wave-style button and returns the HTML code, ready to insert into the DOM
+			// Content should be a string, it's the label for the button
+			// ID should be a unique identifier, which will be used as the button element's identifier in the DOM
+			// Callback should be a string, indicating the function to be called when the button is clicked. Make it something like 'test()' (leave out the semicolon)
+			function makeButton(content, id, callback) {
+				return '<span onMouseDown="buttonMouseDown(\'' + id + '\');" onMouseUp="buttonMouseUp(\'' + id + '\');" onMouseOut="buttonMouseUp(\'' + id + '\');" onClick="' + callback + ';" id="' + id + '" class="button_container"><table class="button_table" cellpadding="0" cellspacing="0"><tbody class="button_table_body"><tr class="button_table_row"><td class="button_left"><div class="button_left_content"></div></td><td class="button_mid"><div class="button_mid_content">' + content + '</div></td><td class="button_right"><div class="button_right_content"></div></td></tr></tbody></table></span>';
+			}
+			
 			// Updates the buttons
 			function setupButtons(editing) {
 				b = buttons();
@@ -107,15 +223,15 @@ limitations under the License.
 					var button = b[i];
 					var button_code;
                     if (!editing) {
-                        button_code = "<input type=\"button\" value=\"" + button["label"] + "\" onclick=\"action('" + button["action"] + "');\" />";
+                        button_code = makeButton(button["label"], "button_" + i, "action('" + button["action"] + "');");
 					} else {
-						button_code = "<input type=\"button\" value=\"Remove '" + button["label"] + "'\" onclick=\"removeButton('" + button["label"] + "');\" />";;
+						button_code = makeButton("Remove " + button["label"], "remove_button_" + i, "removeButton('" + button["label"] + "');");
 					}
-					button_code += "<br />";
+					button_code += "&nbsp;";
 					code += button_code;
 				}
 				$("#buttons_content").html(code);
-				gadgets.window.adjustHeight();
+				gadgets.window.resizeAgain();
 			}
 			
 			// --== ACTION STUFF ==--
@@ -142,9 +258,6 @@ limitations under the License.
 			// Called when the user clicks on a button
 			function action(action) {
 				setActions([action]);
-				//var currentActions = actions();
-				//currentActions.push(action);
-				//setActions(currentActions);
 			}
 			
 			// --== CALLBACKS ==--
@@ -176,9 +289,8 @@ limitations under the License.
 			function embedVideo(code) {
 				video_code_cache = code;
 				document.getElementById("video_content_player").innerHTML = code;
-				document.getElementById("video_content_buttons").innerHTML = "<input type=\"button\" value=\"Remove Video\" onclick=\"userUnembedVideo();\" />";
-				gadgets.window.adjustHeight();
-				
+				document.getElementById("video_content_buttons").innerHTML = makeButton("Remove Video", "remove_video", "userUnembedVideo()");
+				gadgets.window.resizeAgain();
 			}
 			
 			// Embeds the value of #stream_code in #video_content_player and updates the shared state
@@ -190,14 +302,14 @@ limitations under the License.
 			}
 			
 			// The embed form code
-			var embedder = "Video stream embed code: <input type=\"text\" id=\"stream_code\" size=\"50\" /> <input type=\"button\" value=\"Embed\" onclick=\"userEmbedVideo();\" />";
+			var embedder = "Video stream embed code: <div><input type=\"text\" id=\"stream_code\" style=\"width: 100%\" /></div>" + makeButton("Embed", "embed_button", "userEmbedVideo()");
 			
 			// Unembeds the video
 			function unembedVideo() {
 				video_code_cache = "";
 				document.getElementById("video_content_player").innerHTML = "";
 				document.getElementById("video_content_buttons").innerHTML = embedder;
-				gadgets.window.adjustHeight();
+				gadgets.window.resizeAgain();
 			}
 			
 			// Unembeds the video and updates the shared state
@@ -261,11 +373,10 @@ limitations under the License.
 				if (badCharacters) {
 					var msg = new gadgets.MiniMessage(__MODULE_ID__, document.getElementById("minimessage_content"));
 					msg.createDismissibleMessage("Please ensure the button's name does not contain any of the following symbols: \" '", 3);
-					gadgets.window.adjustHeight();
 				} else if (buttonExistsWithLabel(label)) {
 					var msg = new gadgets.MiniMessage(__MODULE_ID__, document.getElementById("minimessage_content"));
 					msg.createDismissibleMessage("Please choose a unique name for the button.", 3);
-					gadgets.window.adjustHeight();
+					gadgets.window.resizeAgain();
 				} else {
 					var action = "";
 					
@@ -325,7 +436,9 @@ limitations under the License.
 
 		<div id="wrapper">
 			<div style="font-size: 18pt; font-weight: bold;">Mindstormsy</div>
-			<div id="waveid_content"><input type="button" value="Get Wave ID" onclick="displayWaveId();" /></div>
+			<div id="waveid_content"><script type="text/javascript">
+				document.write(makeButton("Get Wave ID", "waveId_button", "displayWaveId()"));
+			</script></div>
 			<hr />
 			<div id="video_content" style="height: 365px;">
 				<div id="video_content_player">
@@ -351,8 +464,9 @@ limitations under the License.
 				<div id="minimessage_content"></div>
 				<hr />
 			</div>
+			
 			<div id="buttons_content">
-
+				
 			</div>
 		</div>
 	]]>

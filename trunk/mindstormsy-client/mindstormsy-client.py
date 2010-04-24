@@ -1,5 +1,8 @@
 #!/usr/bin/python
 #
+# Mindstormsy-Client combines the MindstormsyAPI with the nxtdriver module to enable the controlling
+# of a LEGO Mindstorms NXT robot through the Mindstormsy Wave Robot and Gadget.
+#
 # Copyright (C) 2010 George Caley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,31 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import httplib, urllib
-from json import loads, dumps
+from mindstormsyapi import MindstormsyClient, SERVER_ERROR, UNKNOWN_ERROR
 import nxtdriver
 from optparse import OptionParser
 import sys
-
-def getAction(waveId, timeout, verbose):
-	try:
-		if verbose:
-			print "Polling...",
-		conn = httplib.HTTPConnection("mindstormsy-robot.appspot.com", 80, True, timeout)
-		conn.request("GET", "/?id=" + urllib.quote(waveId))
-		response = conn.getresponse()
-		if verbose:
-			print response.status, response.reason
-		if response.status != 200:
-			return "unk"
-		data = response.read()
-		conn.close()
-		action = loads(data)["action"]
-		return action
-	except Exception as e:
-		if verbose:
-			print str(e)
-		return "unk"
 
 def main():
 	# Parse the command line arguments
@@ -70,11 +52,6 @@ def main():
 		help="The number of seconds each attempt to poll the server will last. If the timeout expires, it simply tries again. Don't make it 1 if you're on a slow internet connection!",
 		metavar="TIMEOUT",
 		default=2)
-	parser.add_option("-v", "--verbose",
-		dest="verbose",
-		action="store_true",
-		help="Prints information about polling requests and Bluetooth messages to the terminal. Very useful for debugging!",
-		default=False)
 	
 	(options, args) = parser.parse_args()
 	
@@ -83,10 +60,13 @@ def main():
 	power = options.power
 	reversePower = power * -1
 	timeout = options.timeout
-	verbose = options.verbose
 	
 	if not waveId or not serialPort:
 		parser.error("waveId and serialPort are both required arguments, and make sure that waveId is enclosed within single quotes")
+	
+	# Create our client object
+	# This is used to poll the Wave robot
+	client = MindstormsyClient()
 	
 	# Begin by opening the Bluetooth connection
 	
@@ -100,16 +80,16 @@ def main():
 	prev = '\x00' * 3
 	while 1:
 		try:
-			# This gets the current action
-			# The Wave robot serves this as {"action": "???"} where ??? is the action
+			# This gets the current action from the Wave robot using MindstormsyAPI
 			# Each action consists of three characters, and each character represents a motor
 			# f = forward, r = reverse, and x = stop/halt
-			curr = getAction(waveId, timeout, verbose)
+			curr = client.poll(waveId, timeout)
 			if len(curr) == 3:
-				if curr == "err":
-					print "Received error code from the server. Check that the Wave ID is correct and try again."
+				if curr == SERVER_ERROR:
+					print "Received error code from the server."
+					print "Verify that the Wave ID you used (%s) was correct, and try again." % waveId
 					sys.exit(1)
-				elif curr == "unk":
+				elif curr == UNKNOWN_ERROR:
 					print "Poll failed"
 					continue
 				
@@ -135,8 +115,6 @@ def main():
 					bigmsg += d.message(motors[n], nxtdriver.OFF)
 				
 				if bigmsg != "":
-					if verbose:
-						print "Sending", repr(bigmsg), "to NXT"
 					d.sendBytes(bigmsg)
 				prev = curr
 			else:
