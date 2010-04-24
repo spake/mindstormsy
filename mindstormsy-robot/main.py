@@ -22,9 +22,11 @@ from waveapi import element
 from waveapi import events
 from waveapi import robot
 
-gadgetURL = "http://mindstormsy-robot.appspot.com/static/mindstormsy-gadget.xml"
-imageURL = "http://mindstormsy-robot.appspot.com/static/thumbnail.jpg"
-profileURL = "http://code.google.com/p/mindstormsy"
+GADGET_URL = "http://mindstormsy-robot.appspot.com/static/mindstormsy-gadget.xml"
+IMAGE_URL = "http://mindstormsy-robot.appspot.com/static/thumbnail.jpg"
+PROFILE_URL = "http://code.google.com/p/mindstormsy"
+
+DEFAULT_ACTION_STRING = "xxx" # All three motors halted
 
 class Action(db.Model):
 	desc = db.StringProperty(required=False)
@@ -38,7 +40,7 @@ def setActionObject(a, waveId):
 def getActionObject(waveId, shouldCreate=True):
 	query = db.GqlQuery("SELECT * FROM Action WHERE waveId = :1", waveId).fetch(1000)
 	if len(query) == 0 and shouldCreate:
-		actionObject = Action(desc="", waveId=waveId)
+		actionObject = Action(desc=DEFAULT_ACTION_STRING, waveId=waveId)
 		actionObject.put()
 		return getActionObject(waveId)
 	elif len(query) > 1:
@@ -53,7 +55,7 @@ def getActionObject(waveId, shouldCreate=True):
 
 def OnGadgetStateChanged(event, wavelet):
 	blip = event.blip
-	gadget = blip.all(element.Gadget, url=gadgetURL)
+	gadget = blip.all(element.Gadget, url=GADGET_URL)
 	if gadget:
 		try:
 			actionJson = gadget.get("actions")
@@ -63,13 +65,10 @@ def OnGadgetStateChanged(event, wavelet):
 			pass
 
 def OnWaveletSelfAdded(event, wavelet):
-	blip = wavelet.root_blip
-	blip.all(element.Gadget).delete()
-	gadget = element.Gadget(gadgetURL)
-	blip.append(gadget)
+	setActionObject(DEFAULT_ACTION_STRING, wavelet.wave_id)
 
 if __name__ == '__main__':
-	r = robot.Robot('Mindstormsy', image_url=imageURL, profile_url=profileURL)
+	r = robot.Robot('Mindstormsy', image_url=IMAGE_URL, profile_url=PROFILE_URL)
 	r.register_handler(events.GadgetStateChanged, OnGadgetStateChanged)
-	#r.register_handler(events.WaveletSelfAdded, OnWaveletSelfAdded) # Robot no longer automatically adds the gadget
+	r.register_handler(events.WaveletSelfAdded, OnWaveletSelfAdded)
 	appengine_robot_runner.run(r)
