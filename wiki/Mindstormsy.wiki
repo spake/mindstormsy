@@ -1,7 +1,5 @@
 #summary Summary of the project.
 
-http://mindstormsy.googlecode.com/files/Mindstormsy-Small.jpg
-
 Mindstormsy is a Google Wave extension that allows multiple users to collaboratively control a LEGO Mindstorms NXT robot from within a Wave. In addition, a video stream from a camera attached to the robot can be displayed.
 
 The frontend to the extension is the gadget. Through the gadget, users can control the NXT robot and watch the live video feed from the camera.
