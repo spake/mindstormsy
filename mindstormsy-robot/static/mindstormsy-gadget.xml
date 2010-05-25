@@ -422,7 +422,6 @@ limitations under the License.
 					wave.setStateCallback(stateChanged);
 					wave.setModeCallback(modeChanged);
 				}
-				setupButtons(isEditing());
 			}
 			
 			// Displays the parent wave's ID in the gadget
@@ -458,7 +457,7 @@ limitations under the License.
 					for (var i = 0; i < motors.length; i++) {
 						document.write('Motor '+motors[i]+': <input type="checkbox" id="addform_motor'+motors[i]+'_enabled" /> <select id="addform_motor'+motors[i]+'_action"><option value="fwd">Forward</option><option value="rev">Reverse</option></select><br />');
 					}
-					document.write(makeButon("Add", "add_button", "addButton()"));
+					document.write(makeButton("Add", "add_button", "addButton()"));
 				</script>
 				<br />
 				<div id="minimessage_content"></div>
